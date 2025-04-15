@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>헬스장 운동 기록 트래커</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- 헤더 -->
+    <header>
+      <button id="menu-toggle" class="menu-toggle">
+        <span class="hamburger"></span>
+      </button>
+      <div class="logo">로고</div>
+      <!-- 빈 div 추가하여 로고 중앙 정렬 -->
+      <div class="empty-space"></div>
+    </header>
+
+    <!-- 사이드바 메뉴 -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">로고</div>
+        <button id="close-menu" class="close-menu">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <nav>
+        <ul>
+          <li>
+            <a href="#" class="active" data-target="calendar-section"
+              >운동 캘린더</a
+            >
+          </li>
+          <li><a href="#" data-target="feed-section">피드</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- 메인 콘텐츠 -->
+    <main>
+      <!-- 캘린더 섹션 -->
+      <section id="calendar-section" class="section active">
+        <div class="calendar-container">
+          <div class="month-navigation">
+            <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+            <h2 id="current-month">2023년 4월</h2>
+            <button id="next-month">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+
+          <div class="calendar-wrapper">
+            <div class="calendar" id="calendar">
+              <div class="weekdays">
+                <div>일</div>
+                <div>월</div>
+                <div>화</div>
+                <div>수</div>
+                <div>목</div>
+                <div>금</div>
+                <div>토</div>
+              </div>
+              <div class="days" id="calendar-days">
+                <!-- 캘린더 날짜는 JavaScript로 생성됩니다 -->
+              </div>
+            </div>
+          </div>
+
+          <div class="workout-details" id="workout-details">
+            <div class="selected-date">
+              <h3 id="selected-date-display">4월 15일</h3>
+            </div>
+            <div class="workout-list">
+              <div class="workout-item">
+                <div class="workout-icon">
+                  <i class="fas fa-dumbbell"></i>
+                </div>
+                <div class="workout-info">
+                  <h4>레그 익스텐션</h4>
+                  <p>50kg x 10회 x 5세트</p>
+                  <span class="workout-time">오전</span>
+                </div>
+              </div>
+              <div class="workout-item">
+                <div class="workout-icon">
+                  <i class="fas fa-dumbbell"></i>
+                </div>
+                <div class="workout-info">
+                  <h4>스쿼트</h4>
+                  <p>80kg x 10회 x 5세트</p>
+                  <span class="workout-time">오전</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 피드 섹션 -->
+      <section id="feed-section" class="section">
+        <div class="feed-container">
+          <!-- 포스트 1 -->
+          <div class="post">
+            <div class="post-header">
+              <div class="post-user">
+                <div class="user-avatar">
+                  <img src="https://picsum.photos/40/40" alt="사용자 아바타" />
+                </div>
+                <div class="user-info">
+                  <h4>헬스왕</h4>
+                  <span>2023년 4월 14일</span>
+                </div>
+              </div>
+            </div>
+            <div class="post-image">
+              <img src="https://picsum.photos/400/400" alt="운동 이미지" />
+            </div>
+            <div class="post-actions">
+              <button class="like-btn">
+                <i class="far fa-heart"></i>
+                <span>124</span>
+              </button>
+            </div>
+            <div class="post-content">
+              <p>
+                다리 운동 완료! 💪 오늘 80kg 스쿼트 5세트 성공했습니다. 꾸준히
+                발전 중!
+              </p>
+            </div>
+            <div class="post-comments">
+              <div class="comment">
+                <strong>헬스팬:</strong> 멋져요! 계속 화이팅하세요!
+              </div>
+              <div class="comment">
+                <strong>운동코치:</strong> 좋은 자세네요! 다음에는 85kg
+                도전해보세요.
+              </div>
+              <div class="comment">
+                <strong>운동친구:</strong> 대단한 발전이에요!
+              </div>
+              <div class="comment hidden">
+                <strong>건강생활:</strong> 저도 다시 헬스장에 가고 싶어지네요!
+              </div>
+              <div class="comment hidden">
+                <strong>피트니스여정:</strong> 회복 루틴은 어떻게 되나요?
+              </div>
+              <button class="show-more-btn">더 보기</button>
+              <button class="show-less-btn">접기</button>
+            </div>
+            <div class="add-comment">
+              <input type="text" placeholder="댓글 추가..." />
+              <button>등록</button>
+            </div>
+          </div>
+
+          <!-- 포스트 2 -->
+          <div class="post">
+            <div class="post-header">
+              <div class="post-user">
+                <div class="user-avatar">
+                  <img
+                    src="https://picsum.photos/40/40?random=2"
+                    alt="사용자 아바타"
+                  />
+                </div>
+                <div class="user-info">
+                  <h4>피트니스프로</h4>
+                  <span>2023년 4월 13일</span>
+                </div>
+              </div>
+            </div>
+            <div class="post-image">
+              <img
+                src="https://picsum.photos/400/400?random=3"
+                alt="운동 이미지"
+              />
+            </div>
+            <div class="post-actions">
+              <button class="like-btn">
+                <i class="far fa-heart"></i>
+                <span>87</span>
+              </button>
+            </div>
+            <div class="post-content">
+              <p>
+                가슴 운동의 날! 벤치프레스 PR: 70kg x 8회. 매일 더 강해지는
+                느낌! #피트니스 #헬스장 #발전
+              </p>
+            </div>
+            <div class="post-comments">
+              <div class="comment">
+                <strong>헬스매니아:</strong> 놀라운 발전이네요!
+              </div>
+              <div class="comment">
+                <strong>피트니스중독자:</strong> 트레이닝 분할은 어떻게 되나요?
+              </div>
+              <div class="comment">
+                <strong>건강한삶:</strong> 인상적인 기록이에요!
+              </div>
+              <div class="comment hidden">
+                <strong>헬스초보:</strong> 저도 언젠가 그렇게 될 수 있을까요?
+              </div>
+              <div class="comment hidden">
+                <strong>운동매니아:</strong> 식단 관리는 어떻게 하시나요?
+              </div>
+              <button class="show-more-btn">더 보기</button>
+              <button class="show-less-btn">접기</button>
+            </div>
+            <div class="add-comment">
+              <input type="text" placeholder="댓글 추가..." />
+              <button>등록</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
