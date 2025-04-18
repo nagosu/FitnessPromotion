@@ -185,8 +185,17 @@ main {
   text-align: center;
   font-weight: 600;
   color: #777;
-  padding: 10px 0;
+  padding: 10px;
   border-bottom: 1px solid #eee;
+}
+
+/* 요일 색상 설정 */
+.weekdays div:first-child {
+  color: #e74c3c; /* 일요일 - 빨간색 */
+}
+
+.weekdays div:last-child {
+  color: #3498db; /* 토요일 - 파란색 */
 }
 
 .days {
@@ -209,22 +218,39 @@ main {
   position: relative;
 }
 
+/* 날짜 색상 설정 */
+.day.sunday {
+  color: #e74c3c; /* 일요일 - 빨간색 */
+}
+
+.day.saturday {
+  color: #3498db; /* 토요일 - 파란색 */
+}
+
 .day:hover {
   background-color: #f0f0f0;
 }
 
 .day.today {
   background-color: #007bff;
-  color: white;
+  color: white !important; /* 선택된 날짜는 색상 우선 적용 */
 }
 
 .day.selected {
   background-color: #007bff;
-  color: white;
+  color: white !important; /* 선택된 날짜는 색상 우선 적용 */
 }
 
 .day.other-month {
   color: #ccc;
+}
+
+.day.other-month.sunday {
+  color: #f8c9c5;
+}
+
+.day.other-month.saturday {
+  color: #b3d7f0;
 }
 
 /* 날짜 밑의 점 삭제 */
@@ -287,6 +313,22 @@ main {
 .workout-time {
   font-size: 0.8rem;
   color: #999;
+}
+
+/* 운동 데이터가 없을 때 표시되는 메시지 */
+.no-workout-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  color: #999;
+  font-size: 0.9rem;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.no-workout-data p {
+  margin: 0;
 }
 
 /* 피드 */
@@ -373,7 +415,7 @@ main {
 
 .post-actions button span {
   color: #333; /* 좋아요 개수 텍스트 색상을 검정색으로 설정 */
-  font-size: 0.9rem; /* 텍스트 크기 살짝 줄임 */
+  font-size: 0.9rem;
 }
 
 .post-content {

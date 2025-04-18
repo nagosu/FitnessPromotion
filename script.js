@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sidebar.classList.add('open');
   });
 
-  // 닫기 버튼 클릭 시 사��드바 닫기
+  // 닫기 버튼 클릭 시 사드바 닫기
   closeMenu.addEventListener('click', () => {
     sidebar.classList.remove('open');
   });
@@ -66,6 +66,24 @@ document.addEventListener('DOMContentLoaded', () => {
     '12월',
   ];
 
+  // 날짜별 운동 데이터 (더미 데이터)
+  const workoutData = {
+    // 형식: "YYYY-MM-DD": [운동 배열]
+    // 현재 연도에 맞게 데이터 키 수정
+    [`${currentYear}-04-18`]: [
+      {
+        name: '벤치프레스',
+        details: '70kg x 8회 x 4세트',
+        time: '오전',
+      },
+      {
+        name: '인클라인 덤벨 프레스',
+        details: '24kg x 10회 x 3세트',
+        time: '오전',
+      },
+    ],
+  };
+
   /**
    * 캘린더 생성 함수
    * @param {number} month - 표시할 월 (0-11)
@@ -90,6 +108,58 @@ document.addEventListener('DOMContentLoaded', () => {
       const dayElement = document.createElement('div');
       dayElement.classList.add('day', 'other-month');
       dayElement.textContent = daysInPrevMonth - i;
+
+      // 이전 달의 날짜가 일요일인지 토요일인지 확인
+      const prevMonthDate = new Date(year, month - 1, daysInPrevMonth - i);
+      const dayOfWeek = prevMonthDate.getDay();
+
+      // 일요일(0)이면 sunday 클래스 추가
+      if (dayOfWeek === 0) {
+        dayElement.classList.add('sunday');
+      }
+      // 토요일(6)이면 saturday 클래스 추가
+      else if (dayOfWeek === 6) {
+        dayElement.classList.add('saturday');
+      }
+
+      // 이전 달 날짜 클릭 이벤트 추가
+      dayElement.addEventListener('click', () => {
+        // 이전 달로 이동
+        let prevMonth = month - 1;
+        let prevYear = year;
+        if (prevMonth < 0) {
+          prevMonth = 11;
+          prevYear--;
+        }
+
+        // 선택된 날짜 설정 (이전 달의 해당 날짜)
+        selectedDay = daysInPrevMonth - i;
+
+        // 월 변경 및 캘린더 업데이트
+        currentMonth = prevMonth;
+        currentYear = prevYear;
+
+        // 슬라이드 애니메이션 적용
+        const calendar = document.getElementById('calendar');
+        calendar.style.transform = 'translateX(100%)';
+
+        // 애니메이션 후 캘린더 업데이트
+        setTimeout(() => {
+          generateCalendar(currentMonth, currentYear);
+          // 선택된 날짜의 운동 내역 업데이트
+          updateWorkoutDetails(currentYear, currentMonth, selectedDay);
+
+          calendar.style.transition = 'none'; // 트랜지션 일시 제거
+          calendar.style.transform = 'translateX(-100%)';
+
+          // 약간의 지연 후 트랜지션 다시 적용하여 부드러운 이동 효과
+          setTimeout(() => {
+            calendar.style.transition = 'transform 0.2s ease-in-out';
+            calendar.style.transform = 'translateX(0)';
+          }, 30);
+        }, 200);
+      });
+
       calendarDays.appendChild(dayElement);
     }
 
@@ -99,9 +169,30 @@ document.addEventListener('DOMContentLoaded', () => {
       dayElement.classList.add('day');
       dayElement.textContent = i;
 
+      // 해당 날짜의 요일 확인 (0: 일요일, 6: 토요일)
+      const date = new Date(year, month, i);
+      const dayOfWeek = date.getDay();
+
+      // 일요일(0)이면 sunday 클래스 추가
+      if (dayOfWeek === 0) {
+        dayElement.classList.add('sunday');
+      }
+      // 토요일(6)이면 saturday 클래스 추가
+      else if (dayOfWeek === 6) {
+        dayElement.classList.add('saturday');
+      }
+
       // 선택된 날짜인지 확인하여 강조 표시
       if (i === selectedDay && month === currentMonth && year === currentYear) {
         dayElement.classList.add('selected');
+      }
+
+      // 운동 데이터가 있는 날짜인지 확인하여 표시
+      const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(
+        i
+      ).padStart(2, '0')}`;
+      if (workoutData[dateKey]) {
+        dayElement.classList.add('has-workout');
       }
 
       // 날짜 클릭 이벤트 - 날짜 선택 기능
@@ -119,12 +210,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 선택된 날짜 표시 업데이트
         selectedDateDisplay.textContent = `${monthNames[month]} ${i}일`;
+
+        // 선택된 날짜의 운동 내역 업데이트
+        updateWorkoutDetails(year, month, i);
       });
 
       calendarDays.appendChild(dayElement);
     }
 
-    // 다음 달 날짜 표시 (마지막 주의 빈 칸 채우기)
+    // 다음 달 날짜 표시 (마지막 주 빈 칸 채우기)
     const totalDaysDisplayed = firstDay + daysInMonth;
     const remainingCells = 7 - (totalDaysDisplayed % 7);
 
@@ -134,6 +228,58 @@ document.addEventListener('DOMContentLoaded', () => {
         const dayElement = document.createElement('div');
         dayElement.classList.add('day', 'other-month');
         dayElement.textContent = i;
+
+        // 다음 달의 날짜가 일요일인지 토요일인지 확인
+        const nextMonthDate = new Date(year, month + 1, i);
+        const dayOfWeek = nextMonthDate.getDay();
+
+        // 일요일(0)이면 sunday 클래스 추가
+        if (dayOfWeek === 0) {
+          dayElement.classList.add('sunday');
+        }
+        // 토요일(6)이면 saturday 클래스 추가
+        else if (dayOfWeek === 6) {
+          dayElement.classList.add('saturday');
+        }
+
+        // 다음 달 날짜 클릭 이벤트 추가
+        dayElement.addEventListener('click', () => {
+          // 다음 달로 이동
+          let nextMonth = month + 1;
+          let nextYear = year;
+          if (nextMonth > 11) {
+            nextMonth = 0;
+            nextYear++;
+          }
+
+          // 선택된 날짜 설정 (다음 달의 해당 날짜)
+          selectedDay = i;
+
+          // 월 변경 및 캘린더 업데이트
+          currentMonth = nextMonth;
+          currentYear = nextYear;
+
+          // 슬라이드 애니메이션 적용
+          const calendar = document.getElementById('calendar');
+          calendar.style.transform = 'translateX(-100%)';
+
+          // 애니메이션 후 캘린더 업데이트
+          setTimeout(() => {
+            generateCalendar(currentMonth, currentYear);
+            // 선택된 날짜의 운동 내역 업데이트
+            updateWorkoutDetails(currentYear, currentMonth, selectedDay);
+
+            calendar.style.transition = 'none'; // 트랜지션 일시 제거
+            calendar.style.transform = 'translateX(100%)';
+
+            // 약간의 지연 후 트랜지션 다시 적용하여 부드러운 이동 효과
+            setTimeout(() => {
+              calendar.style.transition = 'transform 0.2s ease-in-out';
+              calendar.style.transform = 'translateX(0)';
+            }, 30);
+          }, 200);
+        });
+
         calendarDays.appendChild(dayElement);
       }
     }
@@ -142,8 +288,49 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedDateDisplay.textContent = `${monthNames[month]} ${selectedDay}일`;
   }
 
+  // 운동 내역을 표시하는 함수 추가
+  function updateWorkoutDetails(year, month, day) {
+    const workoutList = document.querySelector('.workout-list');
+    const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(
+      day
+    ).padStart(2, '0')}`;
+
+    // 운동 목록 초기화
+    workoutList.innerHTML = '';
+
+    // 해당 날짜의 운동 데이터가 있는지 확인
+    if (workoutData[dateKey] && workoutData[dateKey].length > 0) {
+      // 운동 데이터가 있으면 표시
+      workoutData[dateKey].forEach((workout) => {
+        const workoutItem = document.createElement('div');
+        workoutItem.className = 'workout-item';
+        workoutItem.innerHTML = `
+          <div class="workout-icon">
+            <i class="fas fa-dumbbell"></i>
+          </div>
+          <div class="workout-info">
+            <h4>${workout.name}</h4>
+            <p>${workout.details}</p>
+            <span class="workout-time">${workout.time}</span>
+          </div>
+        `;
+        workoutList.appendChild(workoutItem);
+      });
+    } else {
+      // 운동 데이터가 없으면 메시지 표시
+      const noDataMessage = document.createElement('div');
+      noDataMessage.className = 'no-workout-data';
+      noDataMessage.innerHTML = `
+        <p>등록된 운동 정보가 없습니다.</p>
+      `;
+      workoutList.appendChild(noDataMessage);
+    }
+  }
+
   // 캘린더 초기화 - 페이지 로드 시 현재 월 표시
   generateCalendar(currentMonth, currentYear);
+  // 초기 운동 내역 표시
+  updateWorkoutDetails(currentYear, currentMonth, selectedDay);
 
   // 월 이동 기능
 
@@ -166,6 +353,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 애니메이션 후 캘린더 업데이트
     setTimeout(() => {
       generateCalendar(currentMonth, currentYear);
+      // 선택된 날짜의 운동 내역 업데이트
+      updateWorkoutDetails(currentYear, currentMonth, selectedDay);
+
       calendar.style.transition = 'none'; // 트랜지션 일시 제거
       calendar.style.transform = 'translateX(-100%)';
 
@@ -196,6 +386,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 애니메이션 후 캘린더 업데이트
     setTimeout(() => {
       generateCalendar(currentMonth, currentYear);
+      // 선택된 날짜의 운동 내역 업데이트
+      updateWorkoutDetails(currentYear, currentMonth, selectedDay);
+
       calendar.style.transition = 'none'; // 트랜지션 일시 제거
       calendar.style.transform = 'translateX(100%)';
 
